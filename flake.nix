@@ -28,6 +28,14 @@
       environment.systemPackages =
         [
           pkgs.mkalias
+          pkgs.go
+          pkgs.jmeter
+          pkgs.gh
+          pkgs.jq
+          pkgs.k6
+          pkgs.kubectx
+          pkgs.kubie
+          pkgs.pyenv
           pkgs.neovim
           pkgs.tmux
           pkgs.oh-my-zsh
@@ -35,6 +43,7 @@
           pkgs.zsh-autosuggestions
           pkgs.zsh-completions
           pkgs.git
+          pkgs.htop
         ];
 
       homebrew = {
