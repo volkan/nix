@@ -67,7 +67,9 @@
 
       homebrew = {
         enable = true;
-        brews = [];
+        brews = [
+          "mas"
+        ];
         casks = [
           "ghostty"
           "hammerspoon"
