@@ -210,7 +210,7 @@
           setopt SHARE_HISTORY
           setopt HIST_IGNORE_DUPS
 
-          plugins=(git thefuck kubectl kubectx nix)
+          plugins=(git thefuck kubectl kubectx)
 
           # Load Oh My Zsh if it exists
           if [ -e "$ZSH/oh-my-zsh.sh" ]; then
