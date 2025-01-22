@@ -94,6 +94,17 @@
             StandardErrorPath = "/tmp/rectangle.error.log";
           };
         };
+        discord = {
+          serviceConfig = {
+            ProgramArguments = [
+              "/Applications/Discord.app/Contents/MacOS/Discord"
+            ];
+            RunAtLoad = true;
+            KeepAlive = false;
+            StandardOutPath = "/tmp/discord.log";
+            StandardErrorPath = "/tmp/discord.error.log";
+          };
+        };
       };         
 
       system.activationScripts.applications.text = let
