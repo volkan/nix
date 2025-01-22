@@ -28,22 +28,33 @@
       environment.systemPackages =
         [
           pkgs.mkalias
-          pkgs.go
-          pkgs.jmeter
+          # Langs
+          pkgs.go          
           pkgs.gh
+          # Lang tools
+          pkgs.pyenv
+          #
           pkgs.jq
+          # Load test tools
+          pkgs.jmeter
           pkgs.k6
+          # Containers
           pkgs.kubectx
           pkgs.kubie
-          pkgs.pyenv
+          pkgs.kubectl
+          # Editors          
           pkgs.neovim
           pkgs.tmux
+          # zsh 
           pkgs.oh-my-zsh
           pkgs.zsh-syntax-highlighting
           pkgs.zsh-autosuggestions
           pkgs.zsh-completions
+          # 
           pkgs.git
+          # Network
           pkgs.htop
+          pkgs.inetutils
         ];
 
       homebrew = {
@@ -140,6 +151,27 @@
         NSGlobalDomain.AppleICUForce24HourTime = true;
         NSGlobalDomain.AppleInterfaceStyle = "Dark";
         NSGlobalDomain.KeyRepeat = 2;
+      };
+
+      # Hot corners
+      system.defaults.dock = {
+        # wvous-tl-corner = 2;  # Top left corner
+        # wvous-tr-corner = 13;  # Top right corner
+        # wvous-bl-corner = 4;  # Bottom left corner
+        wvous-tr-corner = 13;
+        wvous-br-corner = 14;  # Bottom right corner
+        # Numbers correspond to actions:
+        # 2: Mission Control
+        # 3: Application Windows
+        # 4: Desktop
+        # 5: Start Screen Saver
+        # 6: Disable Screen Saver
+        # 7: Dashboard
+        # 10: Put Display to Sleep
+        # 11: Launchpad
+        # 12: Notification Center
+        # 13: Lock screen 
+        # 13: Quick note
       };
 
       # Auto upgrade nix package and the daemon service.
