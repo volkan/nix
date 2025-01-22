@@ -20,7 +20,7 @@
         if ! pkgutil --pkg-info com.apple.pkg.RosettaUpdateAuto > /dev/null 2>&1; then
           echo "Installing Rosetta 2..."
           softwareupdate --install-rosetta --agree-to-license
-        fi
+        fi   
       '';
 
       # List packages installed in system profile. To search by name, run:
@@ -59,6 +59,10 @@
           # Network
           pkgs.htop
           pkgs.inetutils
+
+          pkgs.openssl
+          pkgs.pkg-config
+          pkgs.rdkafka
         ];
 
       homebrew = {
@@ -228,7 +232,7 @@
       environment.variables = {
         ZSH = "${pkgs.oh-my-zsh}/share/oh-my-zsh";
         ZSH_THEME = "robbyrussell";
-        #plugins = [ "git thefuck" ];
+        PKG_CONFIG_PATH = "${pkgs.rdkafka}/lib/pkgconfig";
       };
     };
   in
