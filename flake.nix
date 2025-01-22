@@ -51,22 +51,41 @@
           "visual-studio-code"
           "clipy"
           "discord"
+          "rectangle"
+          "spotify"
+          "google-chrome"
+          "vlc"
+          "cyberduck"
+          "telegram"
         ];
 
         onActivation.cleanup = "zap";
       };
 
-      launchd.user.agents.clipy = {
-        serviceConfig = {
-          ProgramArguments = [
-            "/Applications/Clipy.app/Contents/MacOS/Clipy"
-          ];
-          RunAtLoad = true;
-          KeepAlive = true;
-          StandardOutPath = "/tmp/clipy.log";
-          StandardErrorPath = "/tmp/clipy.error.log";
+      launchd.user.agents = {
+        clipy = {
+          serviceConfig = {
+            ProgramArguments = [
+              "/Applications/Clipy.app/Contents/MacOS/Clipy"
+            ];
+            RunAtLoad = true;
+            KeepAlive = true;
+            StandardOutPath = "/tmp/clipy.log";
+            StandardErrorPath = "/tmp/clipy.error.log";
+          };
         };
-      };            
+        rectangle = {
+          serviceConfig = {
+            ProgramArguments = [
+              "/Applications/Rectangle.app/Contents/MacOS/Rectangle"
+            ];
+            RunAtLoad = true;
+            KeepAlive = true;
+            StandardOutPath = "/tmp/rectangle.log";
+            StandardErrorPath = "/tmp/rectangle.error.log";
+          };
+        };
+      };         
 
       system.activationScripts.applications.text = let
         env = pkgs.buildEnv {
@@ -94,6 +113,7 @@
         dock.persistent-apps = [
           "/System/Applications/Mail.app"
           "/System/Applications/Calendar.app"
+          "/Applications/Google Chrome.app"
         ];
         finder.FXPreferredViewStyle = "clmv";
         loginwindow.GuestEnabled  = false;
@@ -129,11 +149,32 @@
         
         # For adding plugins, you'll need to add them to environment.systemPackages
         variables = {
-          ZSH_THEME = "robbyrussell";
-          # Add other zsh variables here
+          ZSH_THEME = "robbyrussell";          
         };
       };
 
+      environment.shells = with pkgs; [ zsh ];
+      environment.variables = {
+        ZSH = "${pkgs.oh-my-zsh}/share/oh-my-zsh";
+        ZSH_THEME = "robbyrussell";
+      };
+
+      # Configure zsh
+      environment.extraInit = ''
+        # Load Oh My Zsh
+        if [ -e "$ZSH/oh-my-zsh.sh" ]; then
+          source "$ZSH/oh-my-zsh.sh"
+        fi
+
+        # Load plugins
+        source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+        source ${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+        # Source local config if it exists
+        if [ -f ~/.zshrc.local ]; then
+          source ~/.zshrc.local
+        fi
+      '';
 
     };
   in
