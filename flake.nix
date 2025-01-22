@@ -189,7 +189,6 @@
   in
   {
     # Build darwin flake using:
-    # $ darwin-rebuild build --flake .#osx-M61HQT3V2V
     darwinConfigurations."volkansmpro" = nix-darwin.lib.darwinSystem {
       modules = [
         configuration
