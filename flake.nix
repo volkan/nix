@@ -54,6 +54,8 @@
           pkgs.zsh-autosuggestions
           pkgs.zsh-completions
           pkgs.thefuck
+          pkgs.fzf
+          pkgs.fd
           # 
           pkgs.git
           # Network
@@ -210,15 +212,21 @@
           setopt SHARE_HISTORY
           setopt HIST_IGNORE_DUPS
 
-          plugins=(git thefuck kubectl kubectx)
+          # FZF configuration
+          export FZF_DEFAULT_COMMAND='fd --type f'
+          export FZF_DEFAULT_OPTS='--height 40% --border'
+          
+          if [ -n "$(command -v fzf)" ]; then
+            source ${pkgs.fzf}/share/fzf/completion.zsh
+            source ${pkgs.fzf}/share/fzf/key-bindings.zsh
+          fi
+
+          plugins=(git thefuck kubectl kubectx fzf)
 
           # Load Oh My Zsh if it exists
           if [ -e "$ZSH/oh-my-zsh.sh" ]; then
             source "$ZSH/oh-my-zsh.sh"
           fi
-
-          # Initialize thefuck
-          eval $(thefuck --alias)
 
           # Load plugins
           source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
