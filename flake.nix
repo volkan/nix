@@ -27,6 +27,7 @@
       # $ nix-env -qaP | grep wget
       environment.systemPackages =
         [
+          pkgs.docker
           pkgs.mkalias
           # Langs
           pkgs.go          
@@ -42,14 +43,17 @@
           pkgs.kubectx
           pkgs.kubie
           pkgs.kubectl
+          # Tools
+          pkgs.k9s
           # Editors          
           pkgs.neovim
           pkgs.tmux
-          # zsh 
+          # zsh
           pkgs.oh-my-zsh
           pkgs.zsh-syntax-highlighting
           pkgs.zsh-autosuggestions
           pkgs.zsh-completions
+          pkgs.thefuck
           # 
           pkgs.git
           # Network
@@ -59,9 +63,7 @@
 
       homebrew = {
         enable = true;
-        brews = [
-
-        ];
+        brews = [];
         casks = [
           "ghostty"
           "hammerspoon"
@@ -78,7 +80,6 @@
           "cyberduck"
           "telegram"
         ];
-
         onActivation.cleanup = "zap";
       };
 
@@ -153,7 +154,7 @@
         NSGlobalDomain.KeyRepeat = 2;
       };
 
-      # Hot corners
+	  # Hot corners
       system.defaults.dock = {
         # wvous-tl-corner = 2;  # Top left corner
         # wvous-tr-corner = 13;  # Top right corner
@@ -176,58 +177,59 @@
 
       # Auto upgrade nix package and the daemon service.
       services.nix-daemon.enable = true;
-      # nix.package = pkgs.nix;
 
       # Necessary for using flakes on this system.
       nix.settings.experimental-features = "nix-command flakes";
-
-      # Enable alternative shell support in nix-darwin.
-      # programs.fish.enable = true;
 
       # Set Git commit hash for darwin-version.
       system.configurationRevision = self.rev or self.dirtyRev or null;
 
       # Used for backwards compatibility, please read the changelog before changing.
-      # $ darwin-rebuild changelog
       system.stateVersion = 5;
 
       # The platform the configuration will be used on.
       nixpkgs.hostPlatform = "aarch64-darwin";
 
+      # ZSH Configuration
       programs.zsh = {
         enable = true;
         enableCompletion = true;
         promptInit = ""; # Clear this to avoid conflict
-        
-        # For adding plugins, you'll need to add them to environment.systemPackages
-        variables = {
-          ZSH_THEME = "robbyrussell";          
-        };
+        interactiveShellInit = ''
+          export HISTFILE="$HOME/.zsh_history"
+          export HISTSIZE=10000000
+          export SAVEHIST=10000000
+          setopt EXTENDED_HISTORY
+          setopt SHARE_HISTORY
+          setopt HIST_IGNORE_DUPS
+
+          plugins=(git thefuck kubectl kubectx)
+
+          # Load Oh My Zsh if it exists
+          if [ -e "$ZSH/oh-my-zsh.sh" ]; then
+            source "$ZSH/oh-my-zsh.sh"
+          fi
+
+          # Initialize thefuck
+          eval $(thefuck --alias)
+
+          # Load plugins
+          source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+          source ${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+          # Source local config if it exists
+          if [ -f ~/.zshrc.local ]; then
+            source ~/.zshrc.local
+          fi
+        '';
       };
 
       environment.shells = with pkgs; [ zsh ];
       environment.variables = {
         ZSH = "${pkgs.oh-my-zsh}/share/oh-my-zsh";
         ZSH_THEME = "robbyrussell";
+        #plugins = [ "git thefuck" ];
       };
-
-      # Configure zsh
-      environment.extraInit = ''
-        # Load Oh My Zsh
-        if [ -e "$ZSH/oh-my-zsh.sh" ]; then
-          source "$ZSH/oh-my-zsh.sh"
-        fi
-
-        # Load plugins
-        source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-        source ${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-
-        # Source local config if it exists
-        if [ -f ~/.zshrc.local ]; then
-          source ~/.zshrc.local
-        fi
-      '';
-
     };
   in
   {
@@ -239,9 +241,7 @@
         {
           nix-homebrew = {
             enable = true;
-            # Apple Silicon Only
             enableRosetta = true;
-            # User owning the Homebrew prefix
             user = "volkan.altan";
           };
         }
