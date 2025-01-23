@@ -6,13 +6,20 @@
     nix-darwin.url = "github:LnL7/nix-darwin/master";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
+    home-manager.url = "github:nix-community/home-manager";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = inputs@{ self, nix-darwin, nixpkgs, nix-homebrew }:
+  outputs = inputs@{ self, nix-darwin, nixpkgs, nix-homebrew, home-manager }:
   let
     configuration = { pkgs, config, ... }: {
 
       nixpkgs.config.allowUnfree = true;
+
+      users.users."volkan.altan" = {
+				name = "volkan.altan";
+				home = "/Users/volkan.altan";
+			};
 
       # Add Rosetta installation script
       system.activationScripts.extraActivation.text = ''
@@ -260,6 +267,14 @@
             user = "volkan.altan";
           };
         }
+        home-manager.darwinModules.home-manager
+        {
+          home-manager = {
+            useGlobalPkgs = true;
+            useUserPackages = true;
+            users."volkan.altan" = import ./home.nix;
+          };
+        }        
       ];
     };
 
