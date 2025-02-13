@@ -34,7 +34,9 @@
       # $ nix-env -qaP | grep wget
       environment.systemPackages =
         [
-          pkgs.docker
+          pkgs.csvtk
+          pkgs.apacheKafka
+          pkgs.kcat
           pkgs.mkalias
           # Langs
           pkgs.go          
@@ -72,15 +74,19 @@
           pkgs.openssl
           pkgs.pkg-config
           pkgs.rdkafka
+          pkgs.nodejs_23
         ];
 
       homebrew = {
         enable = true;
         brews = [
           "mas"
+          "redis"
+          "watch"
         ];
         casks = [
           "ghostty"
+          "docker"
           "hammerspoon"
           "iina"
           "the-unarchiver"
@@ -94,22 +100,12 @@
           "vlc"
           "cyberduck"
           "telegram"
+          "ollama"          
         ];
         onActivation.cleanup = "zap";
       };
 
       launchd.user.agents = {
-        clipy = {
-          serviceConfig = {
-            ProgramArguments = [
-              "/Applications/Clipy.app/Contents/MacOS/Clipy"
-            ];
-            RunAtLoad = true;
-            KeepAlive = true;
-            StandardOutPath = "/tmp/clipy.log";
-            StandardErrorPath = "/tmp/clipy.error.log";
-          };
-        };
         rectangle = {
           serviceConfig = {
             ProgramArguments = [
@@ -205,6 +201,8 @@
       # The platform the configuration will be used on.
       nixpkgs.hostPlatform = "aarch64-darwin";
 
+      security.pam.enableSudoTouchIdAuth = true;
+
       # ZSH Configuration
       programs.zsh = {
         enable = true;
@@ -228,7 +226,7 @@
             source ${pkgs.fzf}/share/fzf/key-bindings.zsh
           fi
 
-          plugins=(git thefuck kubectl kubectx fzf)
+          plugins=(git thefuck kubectl kubectx fzf redis-cli)
 
           # Load Oh My Zsh if it exists
           if [ -e "$ZSH/oh-my-zsh.sh" ]; then
