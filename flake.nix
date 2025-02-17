@@ -100,7 +100,8 @@
           "vlc"
           "cyberduck"
           "telegram"
-          "ollama"          
+          "ollama"
+          "libreoffice"        
         ];
         onActivation.cleanup = "zap";
       };
