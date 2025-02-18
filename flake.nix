@@ -84,6 +84,7 @@
           "redis"
           "watch"
           "awscli"
+          "graphviz"
         ];
         casks = [
           "ghostty"
