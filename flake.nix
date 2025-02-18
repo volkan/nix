@@ -83,6 +83,7 @@
           "mas"
           "redis"
           "watch"
+          "awscli"
         ];
         casks = [
           "ghostty"
