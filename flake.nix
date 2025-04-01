@@ -43,6 +43,7 @@
           pkgs.gh
           # Lang tools
           pkgs.pyenv
+          pkgs.pipx
           #
           pkgs.jq
           # Load test tools
@@ -74,7 +75,7 @@
           pkgs.openssl
           pkgs.pkg-config
           pkgs.rdkafka
-          pkgs.nodejs_23
+          pkgs.nodejs_23          
         ];
 
       homebrew = {
