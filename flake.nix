@@ -75,7 +75,8 @@
           pkgs.openssl
           pkgs.pkg-config
           pkgs.rdkafka
-          pkgs.nodejs_23          
+          pkgs.nodejs_23      
+          pkgs.poetry    
         ];
 
       homebrew = {
@@ -86,6 +87,7 @@
           "watch"
           "awscli"
           "graphviz"
+          "ripgrep"
         ];
         casks = [
           "ghostty"
